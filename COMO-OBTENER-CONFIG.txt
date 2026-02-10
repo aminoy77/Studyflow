@@ -1,0 +1,251 @@
+🔧 SOLUCIÓN: Firebase NO está inicializado
+============================================
+
+✅ PROBLEMA IDENTIFICADO:
+Tu firebase-config.js NO tiene la configuración correcta.
+
+📋 SIGUE ESTOS PASOS EXACTAMENTE:
+==================================
+
+PASO 1: Ve a Firebase Console (30 segundos)
+────────────────────────────────────────────
+1. Abre: https://console.firebase.google.com
+
+2. Verás una lista de tus proyectos
+
+3. Click en TU PROYECTO (el que creaste para StudyFlow)
+
+
+PASO 2: Abre la configuración del proyecto (15 segundos)
+─────────────────────────────────────────────────────────
+1. En la esquina superior izquierda, al lado del nombre del proyecto,
+   verás un icono de ENGRANAJE ⚙️
+
+2. Click en el engranaje ⚙️
+
+3. Click en "Project settings" (Configuración del proyecto)
+
+
+PASO 3: Encuentra tu app web (30 segundos)
+───────────────────────────────────────────
+1. Baja en la página hasta la sección "Your apps" (Tus aplicaciones)
+
+2. Busca el icono </> (Web app)
+
+3. DOS CASOS POSIBLES:
+
+   CASO A: YA TIENES UNA APP WEB (verás un nombre como "StudyFlow Web")
+   → Verás debajo un apartado que dice "SDK setup and configuration"
+   → Click en "Config" (o "SDK setup and configuration")
+   → Ve al PASO 4
+
+   CASO B: NO TIENES APP WEB (solo ves el botón </> para agregar)
+   → Click en el botón </>
+   → Nombre de la app: "StudyFlow Web"
+   → NO marques "Firebase Hosting"
+   → Click "Register app"
+   → Espera que se registre
+   → Ve al PASO 4
+
+
+PASO 4: Copia la configuración (IMPORTANTE - 1 minuto)
+───────────────────────────────────────────────────────
+Ahora verás un código como este:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "AIzaSyC-Xxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  authDomain: "studyflow-12345.firebaseapp.com",
+  projectId: "studyflow-12345",
+  storageBucket: "studyflow-12345.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abc123def456"
+};
+```
+
+IMPORTANTE:
+• Los valores REALES serán diferentes
+• Cada proyecto tiene valores únicos
+• NO uses el ejemplo de arriba, usa TU código
+
+COPIA TODO desde "const firebaseConfig = {" hasta "};"
+
+Selecciona TODO el bloque y copia (Ctrl+C o Cmd+C)
+
+
+PASO 5: Pega en tu archivo (30 segundos)
+─────────────────────────────────────────
+1. Abre el archivo: public/js/firebase-config.js
+
+2. Busca la línea que dice:
+   const firebaseConfig = {
+
+3. SELECCIONA TODO desde "const firebaseConfig = {" 
+   hasta el "}" que está 6 líneas abajo
+
+4. PEGA lo que copiaste de Firebase Console (Ctrl+V o Cmd+V)
+
+5. GUARDA el archivo (Ctrl+S o Cmd+S)
+
+
+PASO 6: Verifica que quedó bien (15 segundos)
+──────────────────────────────────────────────
+Tu firebase-config.js ahora debe verse así:
+
+```javascript
+// ... comentarios arriba ...
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC-abc123...",              // ← TU valor real
+    authDomain: "tu-proyecto.firebaseapp.com", // ← TU valor real
+    projectId: "tu-proyecto-123",              // ← TU valor real
+    storageBucket: "tu-proyecto.appspot.com",  // ← TU valor real
+    messagingSenderId: "123456789",            // ← TU valor real
+    appId: "1:123456:web:abc123"              // ← TU valor real
+};
+
+// ... código abajo ...
+```
+
+VERIFICA:
+[ ] Todos los valores tienen comillas "..."
+[ ] Cada línea termina en coma ,
+[ ] La última línea (appId) NO tiene coma después
+[ ] El } final está solo
+[ ] Guardaste el archivo
+
+
+PASO 7: Prueba que funciona (30 segundos)
+──────────────────────────────────────────
+1. Abre: public/diagnostico.html
+
+2. Deberías ver TODO en verde ✅:
+   ✅ Firebase SDK cargado correctamente
+   ✅ Firebase está inicializado
+   ✅ Firebase Authentication disponible
+   ✅ Firestore disponible
+
+3. Si ves TODO verde = ¡LISTO! Ve al PASO 8
+
+4. Si aún hay rojo = Ve a SOLUCIÓN DE PROBLEMAS abajo
+
+
+PASO 8: Actualiza en Firebase (si ya lo desplegaste antes)
+───────────────────────────────────────────────────────────
+Si YA habías desplegado antes:
+
+cd tu-carpeta-studyflow-firebase
+firebase deploy --only hosting
+
+Espera 20 segundos y prueba tu app online.
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ DESPUÉS DE HACER ESTO:
+=========================
+
+1. Abre diagnostico.html → Debería estar TODO verde ✅
+
+2. Abre index.html → Botones deberían funcionar
+
+3. Prueba registrarte con:
+   Email: test@test.com
+   Password: test123456
+
+
+═══════════════════════════════════════════════════════════════
+
+🆘 SOLUCIÓN DE PROBLEMAS:
+=========================
+
+PROBLEMA: "Todavía dice Firebase NO está inicializado"
+CAUSA: No guardaste el archivo o no lo pegaste bien
+SOLUCIÓN:
+  1. Verifica que guardaste firebase-config.js (Ctrl+S)
+  2. Cierra y abre de nuevo diagnostico.html
+  3. Refresca con Ctrl+F5
+
+
+PROBLEMA: "Error: apiKey not valid"
+CAUSA: Copiaste mal el apiKey
+SOLUCIÓN:
+  1. Ve de nuevo a Firebase Console
+  2. Copia SOLO el valor del apiKey (entre comillas)
+  3. Asegúrate de copiar TODO, incluyendo el final
+
+
+PROBLEMA: "Los valores se ven iguales a los de ejemplo"
+CAUSA: No pegaste TU configuración
+SOLUCIÓN:
+  1. NO uses valores de ejemplo
+  2. DEBES copiar de TU Firebase Console
+  3. Cada proyecto tiene valores únicos
+
+
+PROBLEMA: "Error de sintaxis en firebase-config.js"
+CAUSA: Falta una coma o hay una coma extra
+SOLUCIÓN:
+  Debe verse EXACTAMENTE así:
+  
+  const firebaseConfig = {
+      apiKey: "...",        ← coma aquí
+      authDomain: "...",    ← coma aquí
+      projectId: "...",     ← coma aquí
+      storageBucket: "...", ← coma aquí
+      messagingSenderId: "...", ← coma aquí
+      appId: "..."          ← SIN coma aquí
+  };                        ← punto y coma aquí
+
+
+═══════════════════════════════════════════════════════════════
+
+📸 CAPTURAS DE PANTALLA (Referencia visual):
+============================================
+
+En Firebase Console deberías ver:
+
+1. Página principal:
+   [Lista de proyectos]
+   → Click en TU proyecto
+
+2. Dentro del proyecto:
+   [Nombre del proyecto]  [⚙️ Settings] [👤 User]
+   → Click en ⚙️
+
+3. Project Settings:
+   [General] [Service accounts] [Cloud Messaging]
+   → Scroll down
+
+4. Your apps:
+   [🍎 iOS] [🤖 Android] [</> Web]
+   → Si ya existe, verás tu app
+   → Si no existe, click en </>
+
+5. SDK setup and configuration:
+   [Config] [CDN]
+   → Click en Config
+   → COPIA el código que aparece
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ CHECKLIST FINAL:
+===================
+
+Antes de continuar, verifica:
+
+[ ] Fuiste a Firebase Console
+[ ] Abriste Project Settings (⚙️)
+[ ] Encontraste "Your apps"
+[ ] Copiaste firebaseConfig COMPLETO
+[ ] Pegaste en public/js/firebase-config.js
+[ ] Guardaste el archivo
+[ ] diagnostico.html muestra TODO verde ✅
+
+
+Si TODO está ✅ = ¡Funciona! Ve a index.html y regístrate
+
+Si algo está ❌ = Comparte qué específicamente está rojo
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Diagnóstico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold mb-6">🔍 Diagnóstico de Firebase</h1>
+        
+        <div id="results" class="space-y-4">
+            <p class="text-gray-600">Ejecutando diagnóstico...</p>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-50 border-green-200 text-green-800',
+                error: 'bg-red-50 border-red-200 text-red-800',
+                warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+                info: 'bg-blue-50 border-blue-200 text-blue-800'
+            };
+            
+            const div = document.createElement('div');
+            div.className = `p-4 rounded border ${colors[type]}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        results.innerHTML = '';
+        
+        // Test 1: Firebase SDK cargado
+        if (typeof firebase === 'undefined') {
+            addResult('❌ Firebase SDK NO está cargado', 'error');
+            addResult('Solución: Verifica tu conexión a internet', 'warning');
+        } else {
+            addResult('✅ Firebase SDK cargado correctamente', 'success');
+        }
+        
+        // Test 2: Firebase inicializado
+        try {
+            const apps = firebase.apps;
+            if (apps.length === 0) {
+                addResult('❌ Firebase NO está inicializado', 'error');
+                addResult('Solución: Verifica que firebase-config.js tiene tu configuración correcta', 'warning');
+            } else {
+                addResult('✅ Firebase está inicializado', 'success');
+                
+                // Mostrar configuración (sin datos sensibles)
+                const config = apps[0].options;
+                addResult(`
+                    <strong>Configuración actual:</strong><br>
+                    • Project ID: ${config.projectId || '❌ NO CONFIGURADO'}<br>
+                    • Auth Domain: ${config.authDomain || '❌ NO CONFIGURADO'}<br>
+                    • API Key: ${config.apiKey ? '✅ Configurado' : '❌ NO CONFIGURADO'}
+                `, config.projectId && config.authDomain && config.apiKey ? 'success' : 'error');
+            }
+        } catch (error) {
+            addResult('❌ Error al verificar Firebase: ' + error.message, 'error');
+        }
+        
+        // Test 3: Firebase Auth disponible
+        try {
+            const auth = firebase.auth();
+            if (auth) {
+                addResult('✅ Firebase Authentication disponible', 'success');
+            } else {
+                addResult('❌ Firebase Authentication NO disponible', 'error');
+            }
+        } catch (error) {
+            addResult('❌ Error al acceder a Auth: ' + error.message, 'error');
+        }
+        
+        // Test 4: Firestore disponible
+        try {
+            const db = firebase.firestore();
+            if (db) {
+                addResult('✅ Firestore disponible', 'success');
+            } else {
+                addResult('❌ Firestore NO disponible', 'error');
+            }
+        } catch (error) {
+            addResult('❌ Error al acceder a Firestore: ' + error.message, 'error');
+        }
+        
+        // Test 5: Probar autenticación
+        addResult('<strong>Test de autenticación:</strong><br>Intentando crear usuario de prueba...', 'info');
+        
+        const testEmail = `test${Date.now()}@studyflow.test`;
+        const testPassword = 'test123456';
+        
+        firebase.auth().createUserWithEmailAndPassword(testEmail, testPassword)
+            .then((userCredential) => {
+                addResult('✅ ¡Autenticación funciona! Usuario de prueba creado', 'success');
+                // Eliminar usuario de prueba
+                return userCredential.user.delete();
+            })
+            .then(() => {
+                addResult('✅ Usuario de prueba eliminado correctamente', 'success');
+                addResult(`
+                    <strong>🎉 TODO FUNCIONA CORRECTAMENTE</strong><br><br>
+                    Tu configuración de Firebase está bien.<br>
+                    Puedes volver a <a href="index.html" class="underline font-bold">index.html</a> y registrarte normalmente.
+                `, 'success');
+            })
+            .catch((error) => {
+                addResult(`
+                    <strong>❌ Error en autenticación:</strong><br>
+                    Código: ${error.code}<br>
+                    Mensaje: ${error.message}<br><br>
+                    <strong>Posibles causas:</strong><br>
+                    ${getErrorSolution(error.code)}
+                `, 'error');
+            });
+        
+        function getErrorSolution(errorCode) {
+            const solutions = {
+                'auth/api-key-not-valid': '• Tu API Key no es válida. Verifica que copiaste correctamente la configuración de Firebase Console',
+                'auth/invalid-api-key': '• Tu API Key no es válida. Verifica que copiaste correctamente la configuración de Firebase Console',
+                'auth/app-not-authorized': '• Authentication no está activado en Firebase Console. Ve a Authentication > Sign-in method y activa Email/Password',
+                'auth/operation-not-allowed': '• Email/Password no está habilitado. Ve a Firebase Console > Authentication > Sign-in method y actívalo',
+                'auth/project-not-found': '• El Project ID no existe. Verifica tu configuración en firebase-config.js',
+                'auth/network-request-failed': '• Error de red. Verifica tu conexión a internet'
+            };
+            
+            return solutions[errorCode] || '• Error desconocido. Comparte este código de error para ayudarte mejor.';
+        }
+    </script>
+</body>
+</html>
