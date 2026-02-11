@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <h1 class="text-2xl font-bold gradient-text">StudyFlow</h1>
+                <div class="flex items-center space-x-4">
+                    <span id="userName" class="text-gray-600 font-medium"></span>
+                    <button onclick="handleLogout()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center space-y-8">
+            <div class="text-6xl">🎉</div>
+            <h2 class="text-4xl font-bold gradient-text">¡Bienvenido a StudyFlow!</h2>
+            <p class="text-xl text-gray-600">Tu cuenta ha sido creada exitosamente</p>
+            
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8 space-y-4 text-left">
+                <h3 class="text-2xl font-bold mb-4">✅ Todo funcionando correctamente</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start gap-2">
+                        <span class="text-green-500 font-bold">✓</span>
+                        <span><strong>Autenticación:</strong> Sistema de login funcionando</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-green-500 font-bold">✓</span>
+                        <span><strong>Supabase:</strong> Conectado correctamente</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-green-500 font-bold">✓</span>
+                        <span><strong>Sesión:</strong> Usuario autenticado</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-green-500 font-bold">✓</span>
+                        <span><strong>Deploy:</strong> Listo para Vercel</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-2xl mx-auto">
+                <p class="text-blue-900 font-medium mb-2">🚀 Próximos pasos:</p>
+                <ul class="text-blue-800 text-sm space-y-1 text-left">
+                    <li>1. Este es tu panel principal (app.html)</li>
+                    <li>2. Aquí irán todas las funcionalidades (calendario, tareas, exámenes)</li>
+                    <li>3. Por ahora solo prueba que el login funciona</li>
+                    <li>4. Deploy en Vercel cuando quieras</li>
+                </ul>
+            </div>
+
+            <button onclick="handleLogout()" class="gradient-bg text-white px-8 py-4 rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all">
+                Cerrar Sesión
+            </button>
+        </div>
+    </main>
+
+    <script src="js/supabase-config.js"></script>
+    <script>
+        // Verificar sesión
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                console.log('❌ No session, redirecting to login');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            console.log('✅ User authenticated:', session.user.email);
+            
+            // Mostrar nombre de usuario
+            const userName = session.user.user_metadata?.name || session.user.email;
+            document.getElementById('userName').textContent = userName;
+        }
+        
+        // Manejar logout
+        async function handleLogout() {
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) {
+                console.error('Logout error:', error);
+                alert('Error al cerrar sesión');
+                return;
+            }
+            
+            console.log('✅ Logged out successfully');
+            window.location.href = 'index.html';
+        }
+        
+        // Ejecutar al cargar
+        checkAuth();
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+🎯 STUDYFLOW - CONFIGURACIÓN COMPLETA
+======================================
+
+Login: Email + Contraseña (simple)
+Backend: Supabase (gratis)
+Hosting: Vercel (gratis)
+Tiempo: 10 minutos
+
+═══════════════════════════════════════════════════════════════
+
+PASO 1: CREAR PROYECTO EN SUPABASE (5 min)
+===========================================
+
+1️⃣ Crear cuenta
+────────────────
+• Ve a: https://supabase.com
+• Click "Start your project"
+• Sign up con GitHub (recomendado) o email
+• ✅ Cuenta creada
+
+
+2️⃣ Crear proyecto
+──────────────────
+• Click "New Project"
+• Name: StudyFlow
+• Database Password: [elige una segura y guárdala]
+• Region: Elige la más cercana a ti
+  - Europe (Central) → España/Europa
+  - South America → LATAM
+  - US East → USA
+• Pricing Plan: FREE
+• Click "Create new project"
+• ⏳ Espera 2-3 minutos mientras se crea
+• ✅ Proyecto creado
+
+
+3️⃣ Obtener credenciales
+────────────────────────
+• En el menú izquierdo → Settings ⚙️
+• Click en "API"
+• Verás dos valores:
+
+  ┌──────────────────────────────────────────┐
+  │ Project URL:                             │
+  │ https://abcdefgh.supabase.co             │
+  │ [Copy] ← Click para copiar               │
+  └──────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────┐
+  │ anon public key:                         │
+  │ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... │
+  │ [Copy] ← Click para copiar               │
+  └──────────────────────────────────────────┘
+
+• GUARDA ambos valores
+• ✅ Credenciales listas
+
+
+4️⃣ Crear tabla users
+─────────────────────
+• En el menú izquierdo → SQL Editor
+• Click "+ New query"
+• PEGA este código:
+
+──────────────────────────────────────────────────────────
+-- Crear tabla de usuarios
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    language TEXT DEFAULT 'es',
+    grading_scale INTEGER DEFAULT 10,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Activar seguridad (cada usuario solo ve sus datos)
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+-- Políticas de seguridad
+CREATE POLICY "Users can view own data"
+    ON users FOR SELECT
+    USING (auth.uid() = id);
+
+CREATE POLICY "Users can update own data"
+    ON users FOR UPDATE
+    USING (auth.uid() = id);
+
+CREATE POLICY "Users can insert own data"
+    ON users FOR INSERT
+    WITH CHECK (auth.uid() = id);
+──────────────────────────────────────────────────────────
+
+• Click "Run" (botón verde) o presiona F5
+• Debe decir: "Success. No rows returned"
+• ✅ Tabla creada
+
+
+═══════════════════════════════════════════════════════════════
+
+PASO 2: CONFIGURAR EL CÓDIGO (2 min)
+=====================================
+
+1️⃣ Extraer proyecto
+────────────────────
+• Descarga: studyflow-supabase.zip
+• Extrae en una carpeta
+• Abre la carpeta "studyflow-supabase"
+
+
+2️⃣ Pegar credenciales
+──────────────────────
+• Navega a: public/js/
+• Abre: supabase-config.js (con cualquier editor de texto)
+• Busca estas líneas:
+
+  const SUPABASE_URL = 'https://tuproyecto.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+
+• REEMPLAZA con TUS valores de Supabase:
+
+  const SUPABASE_URL = 'https://TU-URL.supabase.co'
+  const SUPABASE_ANON_KEY = 'TU-KEY-COMPLETO-AQUI'
+
+• GUARDA el archivo (Ctrl+S o Cmd+S)
+• ✅ Configuración lista
+
+
+3️⃣ Probar localmente (OPCIONAL)
+─────────────────────────────────
+• Ve a: public/
+• Doble click en: index.html
+• Se abre en el navegador
+• Prueba registrarte:
+  - Ingresa nombre, email, contraseña
+  - Click "Crear Cuenta"
+  - Deberías entrar a app.html
+• ✅ Si funciona, todo está bien configurado
+
+
+═══════════════════════════════════════════════════════════════
+
+PASO 3: DEPLOY EN VERCEL (3 min)
+=================================
+
+OPCIÓN A - Con Vercel CLI (MÁS FÁCIL):
+───────────────────────────────────────
+
+1️⃣ Instalar Vercel CLI
+   
+   npm install -g vercel
+
+2️⃣ Deploy
+   
+   • Abre terminal en la carpeta studyflow-supabase
+   • Ejecuta: vercel
+   
+   • Te preguntará:
+     ? Set up and deploy? → Y
+     ? Which scope? → Tu cuenta
+     ? Link to existing project? → N
+     ? What's your project's name? → studyflow
+     ? In which directory is your code? → ./public
+   
+   • ⏳ Espera 20-30 segundos...
+   
+   • ✅ Te dará una URL:
+     https://studyflow-xxx.vercel.app
+
+
+OPCIÓN B - Con GitHub + Vercel Web:
+────────────────────────────────────
+
+1️⃣ Subir a GitHub
+   
+   • Crea repo en github.com
+   • En terminal:
+     
+     git init
+     git add .
+     git commit -m "Initial commit"
+     git branch -M main
+     git remote add origin https://github.com/TUUSUARIO/studyflow.git
+     git push -u origin main
+
+2️⃣ Deploy en Vercel
+   
+   • Ve a: vercel.com
+   • Sign up con GitHub
+   • Click "Add New..." → "Project"
+   • Import tu repo "studyflow"
+   • Root Directory: ./public
+   • Click "Deploy"
+   • ⏳ Espera 20 segundos...
+   • ✅ URL: https://studyflow-xxx.vercel.app
+
+
+═══════════════════════════════════════════════════════════════
+
+¡LISTO! 🎉
+==========
+
+Tu app: https://studyflow-xxx.vercel.app
+
+PRUEBA:
+1. Abre la URL
+2. Click "Registrarse"
+3. Ingresa: nombre, email, contraseña
+4. Click "Crear Cuenta"
+5. ¡Deberías entrar a la app! ✨
+
+
+═══════════════════════════════════════════════════════════════
+
+🆘 SOLUCIÓN DE PROBLEMAS
+========================
+
+❌ "Supabase NO configurado"
+→ Verifica que pegaste SUPABASE_URL y SUPABASE_ANON_KEY
+→ Asegúrate de copiar TODO el key (es muy largo)
+→ Guarda el archivo después de editarlo
+
+
+❌ "Email already registered"
+→ Normal, ya usaste ese email
+→ Usa otro email o intenta hacer login
+
+
+❌ "Invalid login credentials"
+→ Email o contraseña incorrectos
+→ Verifica que escribiste bien
+→ ¿Olvidaste tu contraseña? Crea otra cuenta
+
+
+❌ "Error en Vercel"
+→ Root Directory debe ser: ./public
+→ Verifica que los archivos están en GitHub
+→ Intenta de nuevo
+
+
+❌ "No puedo crear la tabla users"
+→ Copia TODO el SQL (hasta el final)
+→ Ejecuta de nuevo el script
+→ Verifica que no hay errores rojos
+
+
+═══════════════════════════════════════════════════════════════
+
+📊 RESUMEN RÁPIDO
+=================
+
+1. Supabase:
+   • Crear proyecto
+   • Copiar URL + Key
+   • Ejecutar SQL
+   ⏱️ 5 min
+
+2. Código:
+   • Pegar credenciales
+   ⏱️ 1 min
+
+3. Vercel:
+   • vercel
+   ⏱️ 2 min
+
+TOTAL: 8 minutos ⚡
+
+
+═══════════════════════════════════════════════════════════════
+
+💰 COSTOS
+=========
+
+Supabase: $0/mes (gratis hasta 500MB DB)
+Vercel: $0/mes (bandwidth ilimitado)
+
+TOTAL: $0/mes para siempre
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ CHECKLIST
+============
+
+SUPABASE:
+[ ] Cuenta creada
+[ ] Proyecto "StudyFlow" creado
+[ ] URL copiado
+[ ] Key copiado
+[ ] Tabla users creada
+
+CÓDIGO:
+[ ] ZIP extraído
+[ ] supabase-config.js editado
+[ ] Credenciales pegadas
+[ ] Archivo guardado
+
+VERCEL:
+[ ] Vercel CLI instalado (o GitHub listo)
+[ ] Deploy ejecutado
+[ ] URL recibida
+
+PRUEBA:
+[ ] Registro funciona
+[ ] Login funciona
+[ ] App carga correctamente
+
+
+═══════════════════════════════════════════════════════════════
+
+¿Listo? ¡Empieza con el PASO 1! 🚀
