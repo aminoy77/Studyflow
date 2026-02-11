@@ -14,8 +14,8 @@
 // ========================================================
 
 // 👇 REEMPLAZA con tus valores de Supabase
-const SUPABASE_URL = 'https://tuproyecto.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+const SUPABASE_URL = 'https://xdcfamfzuukdygbibcqm.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhkY2ZhbWZ6dXVrZHlnYmliY3FtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NTM1MDQsImV4cCI6MjA4NjMyOTUwNH0.OTwe3WEgqhwisSO7W5gojKGy60TCZK6KTQruSAo6Byw'
 
 // ========================================================
 // NO TOQUES NADA DE AQUÍ PARA ABAJO
